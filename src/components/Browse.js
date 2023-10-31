@@ -1,10 +1,26 @@
-import React from 'react'
-import Header from './Header'
+import Header from "./Header";
+import  useNowPlayongMovies from "../hooks/useNowPlayingMovies";
+import MainContainer from "./MainContainer";
+import SecondaryContainer from "./SecondaryContainer";
 
 const Browse = () => {
+        useNowPlayongMovies();
   return (
-    <div><Header/></div>
-  )
-}
+    <div>
+      <Header />
+      <MainContainer/>
+      <SecondaryContainer/>
 
-export default Browse
+     { /** 
+      * Maincontainer
+      *    -videoBacground
+      *    =videotitle
+      * secondarycontainer
+      *  -moviesList*n
+      *   = cards*n
+     */}
+    </div>
+  );
+};
+
+export default Browse;
