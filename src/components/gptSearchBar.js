@@ -34,7 +34,7 @@ const searchMovieTMDB=async (movie)=>{
       //write error handling
     }
     console.log(gptResults.choices[0].message.content);
-    const gptMovies=gptResults.choices[0]?.message?.content.split(","); // this will give the movies in array with coma seperation
+    const gptMovies=gptResults?.choices[0]?.message?.content.split(","); // this will give the movies in array with coma seperation
 
     //for each movie i will search TMDB api
 
