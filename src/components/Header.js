@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/redux/userSlice";
-import { LOGO, SUPPORTED_LANGUAGES, USER_AVATAR } from "../utils/constants";
+import { LOGO, SUPPORTED_LANGUAGES} from "../utils/constants";
 import { toggleGptSearchView } from "../utils/redux/gptSlice";
 import { changeLanguage } from "../utils/redux/configSlice";
 
@@ -60,12 +60,12 @@ const Header = () => {
     
 
   return (
-    <div className="absolute w-full px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between">
-      <img className="w-44 mx-auto md:mx-0" src={LOGO} alt="logo" />
+    <div className="absolute w-full p-2 md:px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between">
+      <img className="md:w-44 w-36 mx-auto md:mx-0" src={LOGO} alt="logo" />
       
 
       {user && (
-        <div className="flex p-3 justify-between items-center">
+        <div className="flex md:p-3 justify-between items-center">
         { showGptSearch&& <select
             className="p-2 m-2  bg-gray-900 text-white rounded-lg"
             onChange={handleLanguageChange}

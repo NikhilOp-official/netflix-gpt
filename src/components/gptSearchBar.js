@@ -59,7 +59,7 @@ const searchMovieTMDB=async (movie)=>{
           placeholder={lang[langKey].gptSearchholder}
         />
         <button
-          className=" col-span-3 py-2 px-3 m-4 bg-red-700 text-white rounded-lg "
+          className=" col-span-3 py-2   ml-0 m-4 bg-red-700 text-white rounded-lg "
           onClick={handleGptSearchClick}
         >
           {lang[langKey].search}
