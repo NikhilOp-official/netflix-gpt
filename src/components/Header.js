@@ -3,10 +3,10 @@ import { auth } from "../utils/firebase";
 import { useNavigate } from "react-router-dom";
 import { onAuthStateChanged, signOut } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, removeUser } from "../utils/userSlice";
+import { addUser, removeUser } from "../utils/redux/userSlice";
 import { LOGO, SUPPORTED_LANGUAGES, USER_AVATAR } from "../utils/constants";
-import { toggleGptSearchView } from "../utils/gptSlice";
-import { changeLanguage } from "../utils/configSlice";
+import { toggleGptSearchView } from "../utils/redux/gptSlice";
+import { changeLanguage } from "../utils/redux/configSlice";
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -15,6 +15,7 @@ const Header = () => {
   const showGptSearch=useSelector((store)=>store.gpt.showGptSearch)
 
   const handleSignOut = () => {
+    //sign out api
     signOut(auth)
       .then(() => {})
       .catch((error) => {
@@ -22,6 +23,8 @@ const Header = () => {
       });
   };
 
+
+  //check the authentication of the user
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -42,7 +45,7 @@ const Header = () => {
         navigate("/");
       }
     });
-    //unsubscribe went component unmou
+    //unsubscribe when component unmou
     return () => unsubscribe();
   }, []);
 
@@ -57,12 +60,12 @@ const Header = () => {
     
 
   return (
-    <div className="absolute w-screen px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between">
+    <div className="absolute w-full px-8 py-2 bg-gradient-to-b from-black z-10 flex flex-col md:flex-row justify-between">
       <img className="w-44 mx-auto md:mx-0" src={LOGO} alt="logo" />
       
 
       {user && (
-        <div className="flex p-3 justify-between">
+        <div className="flex p-3 justify-between items-center">
         { showGptSearch&& <select
             className="p-2 m-2  bg-gray-900 text-white rounded-lg"
             onChange={handleLanguageChange}
@@ -79,9 +82,9 @@ const Header = () => {
           >
            {showGptSearch?"HomePage":"GPT Search" }
           </button>
-          <img className="hidden md:block w-12 h-12" src={user?.photoURL} alt="usericon" />
-          <button onClick={handleSignOut} className="font-bold text-white ">
-            (Sign Out)
+          <img className="hidden md:block w-12 h-12 rounded-xl" src={user?.photoURL} alt="usericon" />
+          <button onClick={handleSignOut} className="py-2 px-4 mx-2 my-2 bg-purple-800 text-white rounded-lg">
+            Sign Out
           </button>
         </div>
       )}

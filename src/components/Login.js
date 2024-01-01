@@ -7,41 +7,42 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
-
 import { useDispatch } from "react-redux";
-import { addUser } from "../utils/userSlice";
+import { addUser } from "../utils/redux/userSlice";
 import { BG_URL, USER_AVATAR } from "../utils/constants";
 
 const Login = () => {
-  const [isSignInForm, setIsSignInForm] = useState(true);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [isSignInForm, setIsSignInForm] = useState(true);   //this state variable used to toggle the signIn and signUp form
+  const [errorMessage, setErrorMessage] = useState(null); // show error message of validating the data that comes from validate.js 
   const dispatch = useDispatch();
 
-  const name = useRef(null);
+
+  //this useRef hook refers to the input box so that we can know what is types by the user and with useRef we do not have to use the state to get the value from the input.
+  
   const email = useRef(null);
   const password = useRef(null);
+  const name = useRef(null);
 
   const handleButtonClick = () => {
-    //validate the form data
-
-    // console.log(email.current.value);
-    // console.log(password.current.value);
-
-    const message = checkValidData(email.current.value, password.current.value);
+    //validating  the form data submited by the user  
+   if(!isSignInForm) {const message = checkValidData(email.current.value, password.current.value,name.current.value);   // checkvalid data is a function exported from validate.js in utils and it will return a message that eg:invalid password or email
+    console.log(message);
     setErrorMessage(message);
-    if (message) return;
-
-    //sign in sign up logic
+   if (message) return; //if the user does write valid inputs dont go ahead of this line 
+}
+    //after checking the validation above then sign in sign up logic
     if (!isSignInForm) {
       // sign up logic
-      createUserWithEmailAndPassword(
-        auth,
+      createUserWithEmailAndPassword(        //this is a api by firebase for creating a user
+        auth,         //this is stored in  central place  i.e firebase.js bcoz on every api call it is using this auth 
         email.current.value,
-        password.current.value
+        password.current.value 
       )
         .then((userCredential) => {
           // Signed up
           const user = userCredential.user;
+
+          //update api
           updateProfile(user, {
             displayName: name.current.value,
             photoURL:USER_AVATAR
@@ -49,6 +50,7 @@ const Login = () => {
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = auth.currentUser;
+              //
               dispatch(
                 addUser({
                   uid: uid,
@@ -87,30 +89,40 @@ const Login = () => {
     }
   };
 
+
+
+
+
+//changing signIn form to Signup form
   const toggleSignInForm = () => {
     setIsSignInForm(!isSignInForm);
   };
 
   return (
-    <div>
+    //LOGO of the app
+    <div className="">
       <Header />
-      <div className="absolute">
+      <div className="absolute w-screen">
         <img
-        className="h-screen w-screen object-cover"
+        className="h-screen w-full object-cover"
           src={BG_URL}
           alt="logo"
         />
       </div>
 
+        {/* login form of the app */}
       <form
-        onSubmit={(e) => e.preventDefault()}
-        className=" w-full md:w-3/12 absolute p-10 bg-black my-36 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80"
+        onSubmit={(e) => e.preventDefault()}    //used to prevent the default behavior of the form
+        className=" w-full md:w-3/12 absolute p-10 bg-black  my-36 md:my-24 mx-auto right-0 left-0 text-white rounded-lg bg-opacity-80"
       >
         <h1 className="font-bold  text-3xl py-4">
           {isSignInForm ? "Sign In" : "Sign Up"}
         </h1>
+        {/* if signup then only show this input field */}
         {!isSignInForm && (
+          
           <input
+          ref={name}
             type="text"
             placeholder="Full Name"
             className="p-4 my-4 w-full  bg-gray-700 rounded-lg"
@@ -129,7 +141,7 @@ const Login = () => {
           placeholder="Password"
           className="p-4 my-4 w-full  bg-gray-700 rounded-lg"
         />
-        <p className="text-red-500 font-bold text-lg p">{errorMessage}</p>
+        <p className="text-red-500 font-bold text-lg p">{errorMessage}</p>   {/*this will show  a message that eg:invalid password or email */}
         <button
           className="p-4 my-6 mx-0 bg-red-700 w-full rounded-lg"
           onClick={handleButtonClick}
